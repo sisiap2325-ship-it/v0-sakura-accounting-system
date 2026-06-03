@@ -30,6 +30,24 @@ export function useSession() {
       }
     }
     setIsPending(false)
+
+    // Listen for storage changes (sign-in/sign-out from other tabs)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'auth_session') {
+        if (e.newValue) {
+          try {
+            setSession(JSON.parse(e.newValue))
+          } catch (err) {
+            console.error('Failed to parse session')
+          }
+        } else {
+          setSession(null)
+        }
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
   }, [])
 
   return { data: session, isPending }

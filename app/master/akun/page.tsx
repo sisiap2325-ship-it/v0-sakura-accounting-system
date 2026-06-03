@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from '@/lib/auth-client'
+import { useSessionContext } from '@/lib/session-context'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -16,7 +16,7 @@ import {
 
 export default function MasterAkunPage() {
   const router = useRouter()
-  const { data: session, isPending } = useSession()
+  const { session, isPending } = useSessionContext()
   const [incomeAccounts, setIncomeAccounts] = useState([])
   const [expenseAccounts, setExpenseAccounts] = useState([])
   const [incomeCategories, setIncomeCategories] = useState([])
@@ -25,35 +25,37 @@ export default function MasterAkunPage() {
   const [activeTab, setActiveTab] = useState('income')
 
   useEffect(() => {
-    if (!isPending && !session?.user) {
-      router.push('/sign-in')
-      return
-    }
+    if (!isPending) {
+      if (!session?.user) {
+        router.push('/sign-in')
+        return
+      }
 
-    // Only admin can access
-    if (session?.user?.role !== 'admin') {
-      router.push('/')
-      return
-    }
+      // Only admin can access
+      if (session.user.role !== 'admin') {
+        router.push('/')
+        return
+      }
 
-    if (session?.user) {
       loadData()
     }
-  }, [session?.user, isPending, router])
+  }, [session?.user?.id, session?.user?.role, isPending, router])
 
   const loadData = async () => {
     try {
       setLoading(true)
-      const [incomeAcc, expenseAcc, incomeCat, expenseCat] = await Promise.all([
-        getIncomeAccounts(session.user.id),
-        getExpenseAccounts(session.user.id),
-        getIncomeCategories(session.user.id),
-        getExpenseCategories(session.user.id),
+      // TODO: Connect to database when available
+      // For now, use mock data
+      setIncomeCategories([
+        { id: '1', name: 'Tiket Masuk', code: 'TK001', type: 'income', description: 'Pendapatan dari tiket masuk' },
+        { id: '2', name: 'Parkir', code: 'PK001', type: 'income', description: 'Pendapatan dari parkir' },
       ])
-      setIncomeAccounts(incomeAcc as any)
-      setExpenseAccounts(expenseAcc as any)
-      setIncomeCategories(incomeCat as any)
-      setExpenseCategories(expenseCat as any)
+      setExpenseCategories([
+        { id: '3', name: 'Gaji Karyawan', code: 'GJ001', type: 'expense', description: 'Biaya gaji karyawan' },
+        { id: '4', name: 'Listrik & Air', code: 'LA001', type: 'expense', description: 'Biaya listrik dan air' },
+      ])
+      setIncomeAccounts([])
+      setExpenseAccounts([])
     } catch (error) {
       console.error('Failed to load data:', error)
     } finally {
@@ -72,7 +74,7 @@ export default function MasterAkunPage() {
     )
   }
 
-  if (!session?.user) return null
+  if (isPending || !session?.user) return null
 
   return (
     <div className="container py-8">
