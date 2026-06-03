@@ -24,6 +24,11 @@ interface Asset {
   name: string
   category: string
   value: number
+  acquisitionCost: number
+  bookValue: number
+  depreciation: number
+  depreciationRate: number
+  depreciationMethod: string
   condition: string
   location: string
   purchaseDate: string
@@ -108,26 +113,32 @@ export function AssetList({ assets: initialAssets, userRole }: AssetListProps) {
               <table className="w-full">
                 <thead className="border-b">
                   <tr>
-                    <th className="text-left py-3 px-4 font-semibold">Name</th>
-                    <th className="text-left py-3 px-4 font-semibold">Category</th>
-                    <th className="text-left py-3 px-4 font-semibold">Value (IDR)</th>
-                    <th className="text-left py-3 px-4 font-semibold">Condition</th>
-                    <th className="text-left py-3 px-4 font-semibold">Location</th>
+                    <th className="text-left py-3 px-4 font-semibold">Nama Aset</th>
+                    <th className="text-left py-3 px-4 font-semibold">Kategori</th>
+                    <th className="text-left py-3 px-4 font-semibold">Harga Perolehan</th>
+                    <th className="text-left py-3 px-4 font-semibold">Nilai Buku</th>
+                    <th className="text-left py-3 px-4 font-semibold">Penyusutan</th>
+                    <th className="text-left py-3 px-4 font-semibold">Tarif (%/th)</th>
+                    <th className="text-left py-3 px-4 font-semibold">Kondisi</th>
+                    <th className="text-left py-3 px-4 font-semibold">Lokasi</th>
                     {canEdit && (
-                      <th className="text-left py-3 px-4 font-semibold">Actions</th>
+                      <th className="text-left py-3 px-4 font-semibold">Aksi</th>
                     )}
                   </tr>
                 </thead>
                 <tbody>
                   {initialAssets.map((asset) => (
                     <tr key={asset.id} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4">{asset.name}</td>
+                      <td className="py-3 px-4 font-medium">{asset.name}</td>
                       <td className="py-3 px-4">
                         <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800 capitalize">
                           {asset.category}
                         </span>
                       </td>
-                      <td className="py-3 px-4">Rp {asset.value.toLocaleString('id-ID')}</td>
+                      <td className="py-3 px-4 text-right">Rp {asset.acquisitionCost.toLocaleString('id-ID')}</td>
+                      <td className="py-3 px-4 text-right">Rp {asset.bookValue.toLocaleString('id-ID')}</td>
+                      <td className="py-3 px-4 text-right">Rp {asset.depreciation.toLocaleString('id-ID')}</td>
+                      <td className="py-3 px-4 text-center">{asset.depreciationRate}%</td>
                       <td className="py-3 px-4">
                         <span
                           className={`inline-block px-2 py-1 rounded text-xs font-medium capitalize ${

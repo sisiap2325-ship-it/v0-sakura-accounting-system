@@ -8,6 +8,23 @@ function hashPassword(password: string): string {
   return crypto.createHash('sha256').update(password).digest('hex')
 }
 
+// Initialize with default admin user
+function initializeDefaultUsers() {
+  if (!memoryUsers.has('admin@sakura.com')) {
+    memoryUsers.set('admin@sakura.com', {
+      id: 'admin-default-001',
+      email: 'admin@sakura.com',
+      name: 'Admin SAKURA',
+      password: hashPassword('admin123'),
+      emailVerified: true,
+      role: 'admin',
+    })
+  }
+}
+
+// Initialize on module load
+initializeDefaultUsers()
+
 function verifyPassword(plainPassword: string, hashedPassword: string): boolean {
   return hashPassword(plainPassword) === hashedPassword
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from '@/lib/auth-client'
+import { useSessionContext } from '@/lib/session-context'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { getAssets } from '@/app/actions/user'
@@ -8,20 +8,20 @@ import { AssetList } from '@/components/asset-list'
 
 export default function AsetPage() {
   const router = useRouter()
-  const { data: session, isPending } = useSession()
+  const { session, isPending } = useSessionContext()
   const [assets, setAssets] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!isPending && !session?.user) {
-      router.push('/sign-in')
-      return
-    }
+    if (!isPending) {
+      if (!session?.user) {
+        router.push('/sign-in')
+        return
+      }
 
-    if (session?.user) {
       loadAssets()
     }
-  }, [session?.user, isPending, router])
+  }, [isPending, router])
 
   const loadAssets = async () => {
     try {
@@ -50,8 +50,8 @@ export default function AsetPage() {
   return (
     <div className="container py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Asset Management</h1>
-        <p className="text-gray-600 mt-2">Manage your organization&apos;s assets and inventory</p>
+        <h1 className="text-3xl font-bold">Manajemen Aset</h1>
+        <p className="text-gray-600 mt-2">Kelola aset dan inventaris organisasi Anda dengan harga perolehan, nilai buku, dan penyusutan</p>
       </div>
 
       <AssetList assets={assets} userRole={session.user.role} />

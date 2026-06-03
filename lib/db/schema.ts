@@ -74,6 +74,11 @@ export const asset = pgTable(
     name: text('name').notNull(),
     category: text('category').notNull(),
     value: bigint('value', { mode: 'number' }).notNull(),
+    acquisitionCost: bigint('acquisitioncost', { mode: 'number' }).notNull(), // Harga Perolehan
+    bookValue: bigint('bookvalue', { mode: 'number' }).notNull(), // Nilai Buku
+    depreciation: bigint('depreciation', { mode: 'number' }).default(0), // Total Penyusutan
+    depreciationRate: bigint('depreciationrate', { mode: 'number' }).default(0), // Tarif Penyusutan (%)
+    depreciationMethod: text('depreciationmethod').default('straight-line'), // Metode: straight-line, declining-balance, units-of-production
     condition: text('condition').notNull(),
     location: text('location').notNull(),
     purchaseDate: date('purchasedate', { mode: 'date' }).notNull(),

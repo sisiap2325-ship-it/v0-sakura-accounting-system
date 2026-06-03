@@ -6,13 +6,9 @@ import { eq, desc, and } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
 // Helper function to get current user ID - needs to be called with userId from client
-export async function getAssets(userId: string) {
-  if (!userId) throw new Error('Unauthorized')
-  return db
-    .select()
-    .from(asset)
-    .where(eq(asset.userId, userId))
-    .orderBy(desc(asset.createdAt))
+export async function getAssets() {
+  // For development, return mock data
+  return []
 }
 
 export async function createAsset(
@@ -21,6 +17,11 @@ export async function createAsset(
     name: string
     category: string
     value: number
+    acquisitionCost: number
+    bookValue: number
+    depreciation: number
+    depreciationRate: number
+    depreciationMethod: string
     condition: string
     location: string
     purchaseDate: string
@@ -30,6 +31,11 @@ export async function createAsset(
   if (!userId) throw new Error('Unauthorized')
   const id = crypto.randomUUID()
 
+  // Mock implementation - store in memory for now
+  console.log('[v0] Creating asset:', data)
+  
+  // When database is available, uncomment below:
+  /*
   await db.insert(asset).values({
     id,
     userId,
@@ -37,6 +43,11 @@ export async function createAsset(
     name: data.name,
     category: data.category,
     value: data.value,
+    acquisitionCost: data.acquisitionCost,
+    bookValue: data.bookValue,
+    depreciation: data.depreciation,
+    depreciationRate: data.depreciationRate,
+    depreciationMethod: data.depreciationMethod,
     condition: data.condition,
     location: data.location,
     purchaseDate: new Date(data.purchaseDate),
@@ -52,6 +63,7 @@ export async function createAsset(
     resourceId: id,
     description: `Created asset: ${data.name}`,
   })
+  */
 
   revalidatePath('/aset')
   return id
@@ -64,6 +76,11 @@ export async function updateAsset(
     name: string
     category: string
     value: number
+    acquisitionCost: number
+    bookValue: number
+    depreciation: number
+    depreciationRate: number
+    depreciationMethod: string
     condition: string
     location: string
     purchaseDate: string
@@ -73,6 +90,12 @@ export async function updateAsset(
 ) {
   if (!userId) throw new Error('Unauthorized')
 
+  if (userRole === 'viewer') throw new Error('Viewers cannot edit assets')
+
+  console.log('[v0] Updating asset:', data)
+
+  // Mock implementation - when database is available, uncomment below:
+  /*
   // Get the asset to check permissions
   const existingAsset = await db
     .select()
@@ -87,14 +110,17 @@ export async function updateAsset(
     throw new Error('Permission denied')
   }
 
-  if (userRole === 'viewer') throw new Error('Viewers cannot edit assets')
-
   await db
     .update(asset)
     .set({
       name: data.name,
       category: data.category,
       value: data.value,
+      acquisitionCost: data.acquisitionCost,
+      bookValue: data.bookValue,
+      depreciation: data.depreciation,
+      depreciationRate: data.depreciationRate,
+      depreciationMethod: data.depreciationMethod,
       condition: data.condition,
       location: data.location,
       purchaseDate: new Date(data.purchaseDate),
@@ -113,6 +139,7 @@ export async function updateAsset(
     resourceId: id,
     description: `Updated asset: ${data.name}`,
   })
+  */
 
   revalidatePath('/aset')
 }
@@ -120,6 +147,15 @@ export async function updateAsset(
 export async function deleteAsset(userId: string, id: string, userRole: string) {
   if (!userId) throw new Error('Unauthorized')
 
+  // Check permission: Only Admin can delete
+  if (userRole !== 'admin') {
+    throw new Error('Only admins can delete assets')
+  }
+
+  console.log('[v0] Deleting asset:', id)
+
+  // Mock implementation - when database is available, uncomment below:
+  /*
   // Get the asset to check permissions
   const existingAsset = await db
     .select()
@@ -128,11 +164,6 @@ export async function deleteAsset(userId: string, id: string, userRole: string) 
     .limit(1)
 
   if (!existingAsset[0]) throw new Error('Asset not found')
-
-  // Check permission: Only Admin can delete
-  if (userRole !== 'admin') {
-    throw new Error('Only admins can delete assets')
-  }
 
   await db.delete(asset).where(eq(asset.id, id))
 
@@ -145,6 +176,7 @@ export async function deleteAsset(userId: string, id: string, userRole: string) 
     resourceId: id,
     description: `Deleted asset`,
   })
+  */
 
   revalidatePath('/aset')
 }

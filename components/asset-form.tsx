@@ -13,6 +13,11 @@ interface Asset {
   name: string
   category: string
   value: number
+  acquisitionCost: number
+  bookValue: number
+  depreciation: number
+  depreciationRate: number
+  depreciationMethod: string
   condition: string
   location: string
   purchaseDate: string
@@ -33,6 +38,11 @@ export function AssetForm({ asset, onSuccess, userRole }: AssetFormProps) {
     name: asset?.name || '',
     category: asset?.category || '',
     value: asset?.value.toString() || '',
+    acquisitionCost: asset?.acquisitionCost.toString() || '',
+    bookValue: asset?.bookValue.toString() || '',
+    depreciation: asset?.depreciation.toString() || '0',
+    depreciationRate: asset?.depreciationRate.toString() || '0',
+    depreciationMethod: asset?.depreciationMethod || 'straight-line',
     condition: asset?.condition || '',
     location: asset?.location || '',
     purchaseDate: asset?.purchaseDate || '',
@@ -63,6 +73,11 @@ export function AssetForm({ asset, onSuccess, userRole }: AssetFormProps) {
           name: formData.name,
           category: formData.category,
           value: Number(formData.value),
+          acquisitionCost: Number(formData.acquisitionCost),
+          bookValue: Number(formData.bookValue),
+          depreciation: Number(formData.depreciation),
+          depreciationRate: Number(formData.depreciationRate),
+          depreciationMethod: formData.depreciationMethod,
           condition: formData.condition,
           location: formData.location,
           purchaseDate: formData.purchaseDate,
@@ -73,6 +88,11 @@ export function AssetForm({ asset, onSuccess, userRole }: AssetFormProps) {
           name: formData.name,
           category: formData.category,
           value: Number(formData.value),
+          acquisitionCost: Number(formData.acquisitionCost),
+          bookValue: Number(formData.bookValue),
+          depreciation: Number(formData.depreciation),
+          depreciationRate: Number(formData.depreciationRate),
+          depreciationMethod: formData.depreciationMethod,
           condition: formData.condition,
           location: formData.location,
           purchaseDate: formData.purchaseDate,
@@ -123,11 +143,11 @@ export function AssetForm({ asset, onSuccess, userRole }: AssetFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Value (IDR) *</label>
+          <label className="block text-sm font-medium mb-1">Harga Perolehan (IDR) *</label>
           <Input
-            name="value"
+            name="acquisitionCost"
             type="number"
-            value={formData.value}
+            value={formData.acquisitionCost}
             onChange={handleChange}
             placeholder="0"
             required
@@ -135,7 +155,59 @@ export function AssetForm({ asset, onSuccess, userRole }: AssetFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Condition *</label>
+          <label className="block text-sm font-medium mb-1">Tarif Penyusutan (% per tahun)</label>
+          <Input
+            name="depreciationRate"
+            type="number"
+            value={formData.depreciationRate}
+            onChange={handleChange}
+            placeholder="0"
+            min="0"
+            max="100"
+            step="0.1"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Metode Penyusutan</label>
+          <select
+            name="depreciationMethod"
+            value={formData.depreciationMethod}
+            onChange={handleChange}
+            className="w-full border rounded-md px-3 py-2"
+          >
+            <option value="straight-line">Garis Lurus (Straight-Line)</option>
+            <option value="declining-balance">Saldo Menurun (Declining Balance)</option>
+            <option value="units-of-production">Hasil Produksi (Units of Production)</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Nilai Buku (IDR) *</label>
+          <Input
+            name="bookValue"
+            type="number"
+            value={formData.bookValue}
+            onChange={handleChange}
+            placeholder="0"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Total Penyusutan (IDR)</label>
+          <Input
+            name="depreciation"
+            type="number"
+            value={formData.depreciation}
+            onChange={handleChange}
+            placeholder="0"
+            disabled
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Kondisi *</label>
           <select
             name="condition"
             value={formData.condition}
