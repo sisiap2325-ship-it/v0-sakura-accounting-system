@@ -77,84 +77,90 @@ export default function MasterAkunPage() {
   if (isPending || !session?.user) return null
 
   return (
-    <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Master Akun</h1>
-        <p className="text-gray-600 mt-2">Kelola akun pemasukan dan pengeluaran</p>
+    <div className="lg:pl-72">
+      <div className="p-4 lg:p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl lg:text-4xl font-bold">Master Akun</h1>
+          <p className="text-muted-foreground mt-2 text-lg">Kelola akun pemasukan dan pengeluaran</p>
+        </div>
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="income" className="text-base">Pemasukan</TabsTrigger>
+            <TabsTrigger value="expense" className="text-base">Pengeluaran</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="income" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card className="lg:col-span-1">
+                <CardHeader>
+                  <CardTitle className="text-xl">Tambah Akun</CardTitle>
+                  <CardDescription>Buat akun pemasukan baru</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <MasterAccountForm
+                    type="income"
+                    userId={session.user.id}
+                    categories={incomeCategories}
+                    onSuccess={loadData}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card className="lg:col-span-2">
+                <CardHeader>
+                  <CardTitle className="text-xl">Daftar Akun Pemasukan</CardTitle>
+                  <CardDescription>Total: {incomeAccounts.length} akun</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <MasterAccountList
+                    accounts={incomeAccounts}
+                    type="income"
+                    userId={session.user.id}
+                    categories={incomeCategories}
+                    onDelete={loadData}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="expense" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card className="lg:col-span-1">
+                <CardHeader>
+                  <CardTitle className="text-xl">Tambah Akun</CardTitle>
+                  <CardDescription>Buat akun pengeluaran baru</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <MasterAccountForm
+                    type="expense"
+                    userId={session.user.id}
+                    categories={expenseCategories}
+                    onSuccess={loadData}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card className="lg:col-span-2">
+                <CardHeader>
+                  <CardTitle className="text-xl">Daftar Akun Pengeluaran</CardTitle>
+                  <CardDescription>Total: {expenseAccounts.length} akun</CardDescription>
+            </CardHeader>
+                <CardContent>
+                  <MasterAccountList
+                    accounts={expenseAccounts}
+                    type="expense"
+                    userId={session.user.id}
+                    categories={expenseCategories}
+                    onDelete={loadData}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="income">Akun Pemasukan</TabsTrigger>
-          <TabsTrigger value="expense">Akun Pengeluaran</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="income" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Tambah Akun Pemasukan</CardTitle>
-              <CardDescription>Buat akun pemasukan baru untuk sistem keuangan</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <MasterAccountForm
-                type="income"
-                userId={session.user.id}
-                categories={incomeCategories}
-                onSuccess={loadData}
-              />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Daftar Akun Pemasukan</CardTitle>
-              <CardDescription>Kelola akun pemasukan yang sudah dibuat</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <MasterAccountList
-                accounts={incomeAccounts}
-                type="income"
-                userId={session.user.id}
-                categories={incomeCategories}
-                onDelete={loadData}
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="expense" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Tambah Akun Pengeluaran</CardTitle>
-              <CardDescription>Buat akun pengeluaran baru untuk sistem keuangan</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <MasterAccountForm
-                type="expense"
-                userId={session.user.id}
-                categories={expenseCategories}
-                onSuccess={loadData}
-              />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Daftar Akun Pengeluaran</CardTitle>
-              <CardDescription>Kelola akun pengeluaran yang sudah dibuat</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <MasterAccountList
-                accounts={expenseAccounts}
-                type="expense"
-                userId={session.user.id}
-                categories={expenseCategories}
-                onDelete={loadData}
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
     </div>
   )
 }

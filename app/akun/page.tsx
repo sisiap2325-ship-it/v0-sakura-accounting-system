@@ -1,19 +1,20 @@
 'use client'
 
-import { useSession } from '@/lib/auth-client'
+import { useSessionContext } from '@/lib/session-context'
+import { Sidebar } from '@/components/sidebar'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { AccountPageClient } from '@/components/account-page-client'
 
 export default function AkunPage() {
   const router = useRouter()
-  const { data: session, isPending } = useSession()
+  const { session, isPending } = useSessionContext()
 
   useEffect(() => {
     if (!isPending && !session?.user) {
       router.push('/sign-in')
     }
-  }, [session?.user, isPending, router])
+  }, [isPending, router])
 
   if (isPending) {
     return (
@@ -29,15 +30,20 @@ export default function AkunPage() {
   if (!session?.user) return null
 
   return (
-    <div className="container py-8">
-      <AccountPageClient
-        user={{
-          id: session.user.id,
-          email: session.user.email,
-          name: session.user.name,
-          role: session.user.role,
-        }}
-      />
-    </div>
+    <>
+      <Sidebar />
+      <div className="lg:pl-72">
+        <div className="p-4 lg:p-8">
+          <AccountPageClient
+            user={{
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.name,
+              role: session.user.role,
+            }}
+          />
+        </div>
+      </div>
+    </>
   )
 }

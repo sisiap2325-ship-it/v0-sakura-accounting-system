@@ -48,13 +48,15 @@ export default function AsetPage() {
   if (!session?.user) return null
 
   return (
-    <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Manajemen Aset</h1>
-        <p className="text-gray-600 mt-2">Kelola aset dan inventaris organisasi Anda dengan harga perolehan, nilai buku, dan penyusutan</p>
-      </div>
+    <div className="lg:pl-72">
+      <div className="p-4 lg:p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl lg:text-4xl font-bold">Manajemen Aset</h1>
+          <p className="text-muted-foreground mt-2 text-lg">Kelola aset dan inventaris organisasi Anda dengan harga perolehan, nilai buku, dan penyusutan</p>
+        </div>
 
-      <AssetList assets={assets} userRole={session.user.role} />
+        <AssetList assets={assets} userRole={session.user.role} />
+      </div>
     </div>
   )
 }

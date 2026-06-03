@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { updateUserProfile, logPasswordChange } from '@/app/actions/user'
-import { signOut } from '@/lib/auth-client'
+import { useSessionContext } from '@/lib/session-context'
 
 interface AccountPageProps {
   user: {
@@ -19,6 +19,7 @@ interface AccountPageProps {
 
 export function AccountPageClient({ user }: AccountPageProps) {
   const router = useRouter()
+  const { session } = useSessionContext()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [formData, setFormData] = useState({
@@ -90,10 +91,10 @@ export function AccountPageClient({ user }: AccountPageProps) {
     }
   }
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     setLoading(true)
     try {
-      await signOut()
+      localStorage.removeItem('auth_session')
       router.push('/sign-in')
       router.refresh()
     } catch (error) {
@@ -104,18 +105,18 @@ export function AccountPageClient({ user }: AccountPageProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Account Settings</h1>
-        <p className="text-gray-600 mt-2">Manage your account information and security</p>
+    <div className="space-y-8">
+      <div className="pb-6 border-b">
+        <h1 className="text-3xl lg:text-4xl font-bold">Pengaturan Akun</h1>
+        <p className="text-muted-foreground mt-2 text-lg">Kelola informasi akun dan keamanan Anda</p>
       </div>
 
       {message && (
         <div
-          className={`p-4 rounded-md ${
+          className={`p-4 rounded-lg border ${
             message.includes('successfully')
-              ? 'bg-green-50 text-green-800'
-              : 'bg-red-50 text-red-800'
+              ? 'bg-green-50 text-green-800 border-green-200'
+              : 'bg-red-50 text-red-800 border-red-200'
           }`}
         >
           {message}
@@ -126,8 +127,8 @@ export function AccountPageClient({ user }: AccountPageProps) {
         {/* Profile Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Profile Information</CardTitle>
-            <CardDescription>Update your name and email</CardDescription>
+            <CardTitle className="text-xl">Informasi Profil</CardTitle>
+            <CardDescription>Perbarui nama dan email Anda</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
@@ -168,8 +169,8 @@ export function AccountPageClient({ user }: AccountPageProps) {
         {/* Change Password */}
         <Card>
           <CardHeader>
-            <CardTitle>Change Password</CardTitle>
-            <CardDescription>Update your password to keep your account secure</CardDescription>
+            <CardTitle className="text-xl">Ubah Kata Sandi</CardTitle>
+            <CardDescription>Perbarui kata sandi untuk keamanan akun</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleChangePassword} className="space-y-4">
@@ -214,7 +215,7 @@ export function AccountPageClient({ user }: AccountPageProps) {
       {/* Logout */}
       <Card className="border-red-200 bg-red-50">
         <CardHeader>
-          <CardTitle className="text-red-900">Danger Zone</CardTitle>
+          <CardTitle className="text-red-900 text-xl">Zona Bahaya</CardTitle>
         </CardHeader>
         <CardContent>
           <Button
@@ -223,7 +224,7 @@ export function AccountPageClient({ user }: AccountPageProps) {
             variant="destructive"
             className="w-full"
           >
-            {loading ? 'Logging out...' : 'Logout'}
+            {loading ? 'Keluar...' : 'Keluar dari Akun'}
           </Button>
         </CardContent>
       </Card>

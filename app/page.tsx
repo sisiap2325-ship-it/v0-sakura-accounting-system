@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useSessionContext } from '@/lib/session-context'
 import { Sidebar } from '@/components/sidebar'
@@ -79,13 +80,35 @@ export default function Dashboard() {
       <Sidebar />
       
       <main className="lg:pl-72">
+        {/* Hero Section */}
+        <div className="relative h-48 lg:h-56 overflow-hidden">
+          <Image
+            src="/images/telaga-kusuma.png"
+            alt="Wisata Telaga Kusuma"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+          <div className="absolute inset-0 flex items-center">
+            <div className="px-4 lg:px-8 pt-12 lg:pt-0">
+              <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow-lg">
+                SAKURA
+              </h1>
+              <p className="text-white/90 mt-2 text-lg drop-shadow">
+                Sistem Akuntansi Keuangan Rakyat
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="p-4 lg:p-8">
           {/* Header - Welcome Section */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
-              <h2 className="text-2xl lg:text-3xl font-bold text-foreground">Selamat Datang di SAKURA</h2>
-              <p className="text-muted-foreground mt-2 text-lg">
-                Sistem Akuntansi Keuangan Rakyat - {session?.user?.name || 'User'}
+              <h2 className="text-2xl lg:text-3xl font-bold text-foreground">Selamat Datang, {session?.user?.name || 'User'}</h2>
+              <p className="text-muted-foreground mt-2 text-base">
+                Ringkasan keuangan dan aktivitas terbaru Anda
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
