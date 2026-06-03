@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
@@ -17,11 +16,11 @@ import {
   Settings,
   UserCircle,
   LogOut,
-  Database
+  Database,
+  BarChart3
 } from 'lucide-react'
 import { useState } from 'react'
-import { useSession } from '@/lib/auth-client'
-import { signOut } from '@/lib/auth-client'
+import { useSessionContext } from '@/lib/session-context'
 import { useRouter } from 'next/navigation'
 
 const baseNavigation = [
@@ -39,10 +38,10 @@ const baseNavigation = [
 export function Sidebar() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { data: session } = useSession()
+  const { session } = useSessionContext()
   const router = useRouter()
 
-  const userRole = (session?.user as any)?.role || 'viewer'
+  const userRole = session?.user?.role || 'viewer'
 
   const navigation = [
     ...baseNavigation,
@@ -57,8 +56,8 @@ export function Sidebar() {
     return true
   })
 
-  const handleLogout = async () => {
-    await signOut()
+  const handleLogout = () => {
+    localStorage.removeItem('auth_session')
     router.push('/sign-in')
     router.refresh()
   }
@@ -90,22 +89,15 @@ export function Sidebar() {
         )}
       >
         <div className="flex flex-col h-full">
-          {/* Header with Image */}
-          <div className="relative">
-            <div className="relative h-32 w-full overflow-hidden">
-              <Image
-                src="/images/telaga-kusuma.png"
-                alt="Wisata Telaga Kusuma"
-                fill
-                className="object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-sidebar" />
+          {/* Header with Logo */}
+          <div className="px-6 py-6 bg-gradient-to-r from-blue-600 to-blue-700">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="font-bold text-lg text-white">SAKURA</h1>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 px-6 pb-4">
-              <h1 className="font-bold text-lg text-white drop-shadow-lg">SAKURA</h1>
-              <p className="text-xs text-white/90 drop-shadow">Sistem Akuntansi Keuangan Rakyat</p>
-            </div>
+            <p className="text-xs text-blue-100">Sistem Akuntansi Keuangan Rakyat</p>
           </div>
 
           {/* Navigation */}
@@ -118,16 +110,18 @@ export function Sidebar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() => {
+                    setMobileOpen(false)
+                  }}
                   className={cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
+                    'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors cursor-pointer',
                     isActive
-                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                      : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
+                      ? 'bg-blue-500 text-white'
+                      : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
                   )}
                 >
-                  <item.icon className="h-5 w-5" />
-                  {item.name}
+                  <item.icon className="h-5 w-5 flex-shrink-0" />
+                  <span className="flex-1">{item.name}</span>
                 </Link>
               )
             })}

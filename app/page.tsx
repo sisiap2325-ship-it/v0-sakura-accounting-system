@@ -1,9 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useSession } from '@/lib/auth-client'
+import { useSessionContext } from '@/lib/session-context'
 import { Sidebar } from '@/components/sidebar'
 import { StatCard } from '@/components/stat-card'
 import { TransactionForm } from '@/components/transaction-form'
@@ -27,7 +26,7 @@ import {
 
 export default function Dashboard() {
   const router = useRouter()
-  const { data: session, isPending } = useSession()
+  const { session, isPending } = useSessionContext()
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [summary, setSummary] = useState<FinancialSummary | null>(null)
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([])
@@ -38,7 +37,7 @@ export default function Dashboard() {
     if (!isPending && !session?.user) {
       router.push('/sign-in')
     }
-  }, [session?.user, isPending, router])
+  }, [isPending, router])
 
   const loadData = () => {
     const txns = getTransactions()
@@ -80,38 +79,16 @@ export default function Dashboard() {
       <Sidebar />
       
       <main className="lg:pl-72">
-        {/* Hero Section */}
-        <div className="relative h-48 lg:h-56 overflow-hidden">
-          <Image
-            src="/images/telaga-kusuma.png"
-            alt="Wisata Telaga Kusuma - Waterpark"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
-          <div className="absolute inset-0 flex items-center">
-            <div className="px-4 lg:px-8 pt-12 lg:pt-0">
-              <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow-lg">
-                Wisata Telaga Kusuma
-              </h1>
-              <p className="text-white/90 mt-2 text-lg drop-shadow">
-                Sistem Keuangan BUMDes Tunggulrejo
-              </p>
-            </div>
-          </div>
-        </div>
-
         <div className="p-4 lg:p-8">
-          {/* Header */}
+          {/* Header - Welcome Section */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
-              <h2 className="text-xl font-bold text-foreground">Dashboard Keuangan</h2>
-              <p className="text-muted-foreground mt-1">
-                Ringkasan keuangan dan transaksi terbaru
+              <h2 className="text-2xl lg:text-3xl font-bold text-foreground">Selamat Datang di SAKURA</h2>
+              <p className="text-muted-foreground mt-2 text-lg">
+                Sistem Akuntansi Keuangan Rakyat - {session?.user?.name || 'User'}
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <div className="flex items-center gap-2 bg-card border border-border rounded-lg px-3 py-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
                 <select
@@ -126,10 +103,10 @@ export default function Dashboard() {
               </div>
               <button
                 onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-primary/90 transition-colors"
+                className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-primary/90 transition-colors w-full sm:w-auto justify-center"
               >
                 <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">Tambah Transaksi</span>
+                <span>Tambah Transaksi</span>
               </button>
             </div>
           </div>
