@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { updateUserProfile, logPasswordChange } from '@/app/actions/user'
-import { useSessionContext } from '@/lib/session-context'
+import { useSession, signOut } from '@/lib/auth-client'
 
 interface AccountPageProps {
   user: {
@@ -19,7 +19,7 @@ interface AccountPageProps {
 
 export function AccountPageClient({ user }: AccountPageProps) {
   const router = useRouter()
-  const { session } = useSessionContext()
+  const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [formData, setFormData] = useState({
@@ -91,10 +91,10 @@ export function AccountPageClient({ user }: AccountPageProps) {
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setLoading(true)
     try {
-      localStorage.removeItem('auth_session')
+      await signOut()
       router.push('/sign-in')
       router.refresh()
     } catch (error) {
