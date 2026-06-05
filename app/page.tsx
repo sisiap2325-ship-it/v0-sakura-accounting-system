@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useSessionContext } from '@/lib/session-context'
+import { useSession } from '@/lib/auth-client'
 import { Sidebar } from '@/components/sidebar'
 import { StatCard } from '@/components/stat-card'
 import { TransactionForm } from '@/components/transaction-form'
@@ -22,12 +22,14 @@ import {
   TrendingDown, 
   Wallet, 
   Plus,
-  Calendar
+  Calendar,
+  BarChart3,
+  DollarSign
 } from 'lucide-react'
 
 export default function Dashboard() {
   const router = useRouter()
-  const { session, isPending } = useSessionContext()
+  const { data: session, isPending } = useSession()
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [summary, setSummary] = useState<FinancialSummary | null>(null)
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([])
@@ -35,10 +37,11 @@ export default function Dashboard() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
 
   useEffect(() => {
+    // Only redirect if we're not pending AND there's no session
     if (!isPending && !session?.user) {
       router.push('/sign-in')
     }
-  }, [isPending, router])
+  }, [isPending, session, router])
 
   const loadData = () => {
     const txns = getTransactions()
@@ -80,24 +83,49 @@ export default function Dashboard() {
       <Sidebar />
       
       <main className="lg:pl-72">
-        {/* Hero Section */}
-        <div className="relative h-48 lg:h-56 overflow-hidden">
+        {/* Enhanced Hero Section */}
+        <div className="relative h-48 lg:h-56 overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700">
+          {/* Background Image with Enhanced Overlay */}
           <Image
             src="/images/telaga-kusuma.png"
             alt="Wisata Telaga Kusuma"
             fill
-            className="object-cover"
+            className="object-cover opacity-40"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+          
+          {/* Enhanced Gradient Overlay - Professional Blue Theme */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-700/70 to-blue-600/60" />
+          
+          {/* Decorative Shapes */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-48 -mt-48 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-white/5 rounded-full -ml-36 -mb-36 blur-3xl" />
+          
+          {/* Content */}
           <div className="absolute inset-0 flex items-center">
-            <div className="px-4 lg:px-8 pt-12 lg:pt-0">
-              <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow-lg">
-                SAKURA
-              </h1>
-              <p className="text-white/90 mt-2 text-lg drop-shadow">
-                Sistem Akuntansi Keuangan Rakyat
-              </p>
+            <div className="px-4 lg:px-8 w-full">
+              <div className="flex items-start lg:items-center gap-4">
+                {/* Icon Container */}
+                <div className="hidden sm:flex items-center justify-center w-16 h-16 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20">
+                  <DollarSign className="w-8 h-8 text-white/90" strokeWidth={1.5} />
+                </div>
+                
+                {/* Text Content */}
+                <div>
+                  <h1 className="text-3xl lg:text-4xl font-bold text-white drop-shadow-lg">
+                    SAKURA
+                  </h1>
+                  <p className="text-white/95 mt-1 lg:mt-2 text-sm lg:text-base font-medium drop-shadow">
+                    Sistem Akuntansi Keuangan Rakyat
+                  </p>
+                  <div className="flex gap-2 mt-2 text-xs text-white/80">
+                    <span className="flex items-center gap-1">
+                      <BarChart3 className="w-3 h-3" />
+                      Dashboard Finansial
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
