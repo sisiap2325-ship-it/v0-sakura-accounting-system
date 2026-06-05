@@ -4,82 +4,117 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Modern Professional Accounting Color Palette */
   --background: oklch(0.98 0.005 155);
-  --foreground: oklch(0.20 0.02 155);
+  --foreground: oklch(0.18 0.02 155);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.20 0.02 155);
+  --card-foreground: oklch(0.18 0.02 155);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.20 0.02 155);
-  --primary: oklch(0.45 0.12 160);
+  --popover-foreground: oklch(0.18 0.02 155);
+  
+  /* Primary: Professional Teal/Blue-Green */
+  --primary: oklch(0.50 0.13 175);
   --primary-foreground: oklch(0.98 0.005 155);
-  --secondary: oklch(0.95 0.02 155);
+  
+  /* Secondary: Soft Gray */
+  --secondary: oklch(0.94 0.01 155);
   --secondary-foreground: oklch(0.25 0.02 155);
-  --muted: oklch(0.95 0.01 155);
-  --muted-foreground: oklch(0.50 0.02 155);
-  --accent: oklch(0.55 0.15 85);
-  --accent-foreground: oklch(0.20 0.02 85);
+  
+  /* Muted: Subtle Gray */
+  --muted: oklch(0.92 0.01 155);
+  --muted-foreground: oklch(0.55 0.02 155);
+  
+  /* Accent: Vibrant Amber/Orange */
+  --accent: oklch(0.62 0.16 65);
+  --accent-foreground: oklch(0.20 0.02 65);
+  
+  /* Status Colors */
+  --success: oklch(0.52 0.15 145);
+  --success-foreground: oklch(0.98 0 0);
+  --warning: oklch(0.75 0.15 85);
+  --warning-foreground: oklch(0.25 0.05 85);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
+  
+  /* Borders & Input */
   --border: oklch(0.88 0.02 155);
-  --input: oklch(0.92 0.01 155);
-  --ring: oklch(0.45 0.12 160);
-  --chart-1: oklch(0.45 0.12 160);
-  --chart-2: oklch(0.55 0.15 85);
+  --input: oklch(0.96 0.01 155);
+  --ring: oklch(0.50 0.13 175);
+  
+  /* Chart Colors */
+  --chart-1: oklch(0.50 0.13 175);
+  --chart-2: oklch(0.62 0.16 65);
   --chart-3: oklch(0.55 0.22 25);
   --chart-4: oklch(0.55 0.12 220);
   --chart-5: oklch(0.60 0.10 300);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.25 0.05 160);
-  --sidebar-foreground: oklch(0.95 0.01 155);
-  --sidebar-primary: oklch(0.55 0.15 85);
-  --sidebar-primary-foreground: oklch(0.20 0.02 85);
-  --sidebar-accent: oklch(0.35 0.06 160);
-  --sidebar-accent-foreground: oklch(0.95 0.01 155);
-  --sidebar-border: oklch(0.35 0.05 160);
-  --sidebar-ring: oklch(0.55 0.15 85);
-  --success: oklch(0.55 0.15 145);
-  --success-foreground: oklch(0.98 0 0);
-  --warning: oklch(0.75 0.15 85);
-  --warning-foreground: oklch(0.25 0.05 85);
+  
+  /* Border Radius */
+  --radius: 0.75rem;
+  
+  /* Sidebar - Elegant Dark Teal */
+  --sidebar: oklch(0.22 0.04 170);
+  --sidebar-foreground: oklch(0.98 0.01 155);
+  --sidebar-primary: oklch(0.62 0.16 65);
+  --sidebar-primary-foreground: oklch(0.20 0.02 65);
+  --sidebar-accent: oklch(0.32 0.05 170);
+  --sidebar-accent-foreground: oklch(0.98 0.01 155);
+  --sidebar-border: oklch(0.30 0.04 170);
+  --sidebar-ring: oklch(0.62 0.16 65);
 }
 
 .dark {
-  --background: oklch(0.15 0.02 160);
-  --foreground: oklch(0.95 0.01 155);
-  --card: oklch(0.20 0.02 160);
-  --card-foreground: oklch(0.95 0.01 155);
-  --popover: oklch(0.20 0.02 160);
-  --popover-foreground: oklch(0.95 0.01 155);
-  --primary: oklch(0.55 0.12 160);
-  --primary-foreground: oklch(0.15 0.02 160);
-  --secondary: oklch(0.25 0.03 160);
-  --secondary-foreground: oklch(0.95 0.01 155);
-  --muted: oklch(0.25 0.02 160);
-  --muted-foreground: oklch(0.65 0.02 155);
-  --accent: oklch(0.65 0.15 85);
-  --accent-foreground: oklch(0.15 0.02 85);
-  --destructive: oklch(0.45 0.18 25);
-  --destructive-foreground: oklch(0.95 0 0);
-  --border: oklch(0.30 0.03 160);
-  --input: oklch(0.25 0.02 160);
-  --ring: oklch(0.55 0.12 160);
-  --chart-1: oklch(0.55 0.12 160);
-  --chart-2: oklch(0.65 0.15 85);
+  --background: oklch(0.12 0.01 160);
+  --foreground: oklch(0.96 0.01 155);
+  --card: oklch(0.17 0.02 160);
+  --card-foreground: oklch(0.96 0.01 155);
+  --popover: oklch(0.17 0.02 160);
+  --popover-foreground: oklch(0.96 0.01 155);
+  
+  /* Primary: Lighter teal for dark mode */
+  --primary: oklch(0.60 0.12 175);
+  --primary-foreground: oklch(0.12 0.01 160);
+  
+  /* Secondary */
+  --secondary: oklch(0.22 0.02 160);
+  --secondary-foreground: oklch(0.96 0.01 155);
+  
+  /* Muted */
+  --muted: oklch(0.22 0.02 160);
+  --muted-foreground: oklch(0.70 0.02 155);
+  
+  /* Accent */
+  --accent: oklch(0.70 0.15 65);
+  --accent-foreground: oklch(0.12 0.01 65);
+  
+  /* Status Colors */
+  --success: oklch(0.60 0.14 145);
+  --success-foreground: oklch(0.12 0 0);
+  --warning: oklch(0.75 0.15 85);
+  --warning-foreground: oklch(0.25 0.05 85);
+  --destructive: oklch(0.55 0.18 25);
+  --destructive-foreground: oklch(0.96 0 0);
+  
+  /* Borders & Input */
+  --border: oklch(0.25 0.02 160);
+  --input: oklch(0.20 0.02 160);
+  --ring: oklch(0.60 0.12 175);
+  
+  /* Chart Colors */
+  --chart-1: oklch(0.60 0.12 175);
+  --chart-2: oklch(0.70 0.15 65);
   --chart-3: oklch(0.55 0.18 25);
   --chart-4: oklch(0.55 0.12 220);
   --chart-5: oklch(0.60 0.10 300);
-  --sidebar: oklch(0.18 0.03 160);
-  --sidebar-foreground: oklch(0.95 0.01 155);
-  --sidebar-primary: oklch(0.65 0.15 85);
-  --sidebar-primary-foreground: oklch(0.15 0.02 85);
-  --sidebar-accent: oklch(0.25 0.04 160);
-  --sidebar-accent-foreground: oklch(0.95 0.01 155);
-  --sidebar-border: oklch(0.28 0.03 160);
-  --sidebar-ring: oklch(0.65 0.15 85);
-  --success: oklch(0.55 0.15 145);
-  --success-foreground: oklch(0.98 0 0);
-  --warning: oklch(0.75 0.15 85);
-  --warning-foreground: oklch(0.25 0.05 85);
+  
+  /* Sidebar */
+  --sidebar: oklch(0.15 0.02 160);
+  --sidebar-foreground: oklch(0.96 0.01 155);
+  --sidebar-primary: oklch(0.70 0.15 65);
+  --sidebar-primary-foreground: oklch(0.15 0.02 65);
+  --sidebar-accent: oklch(0.22 0.03 160);
+  --sidebar-accent-foreground: oklch(0.96 0.01 155);
+  --sidebar-border: oklch(0.20 0.02 160);
+  --sidebar-ring: oklch(0.70 0.15 65);
 }
 
 @theme inline {
@@ -131,7 +166,108 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Typography Improvements */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+  
+  h1 {
+    @apply text-4xl;
+  }
+  
+  h2 {
+    @apply text-3xl;
+  }
+  
+  h3 {
+    @apply text-2xl;
+  }
+  
+  h4 {
+    @apply text-xl;
+  }
+  
+  p {
+    @apply leading-relaxed;
+  }
+  
+  /* Link Styling */
+  a {
+    @apply text-primary hover:text-primary/80 transition-colors;
+  }
+  
+  /* Code Styling */
+  code {
+    @apply bg-muted px-1.5 py-0.5 rounded font-mono text-sm;
+  }
+}
+
+@layer components {
+  /* Card Enhancements */
+  .card-elevated {
+    @apply bg-card shadow-sm border border-border rounded-lg;
+  }
+  
+  .card-hover {
+    @apply card-elevated hover:shadow-md transition-shadow duration-200;
+  }
+  
+  /* Button Enhancements */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 transition-colors rounded-md px-4 py-2 font-medium;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 active:bg-secondary/70 transition-colors rounded-md px-4 py-2 font-medium;
+  }
+  
+  /* Stat Card */
+  .stat-card {
+    @apply bg-card border border-border rounded-xl p-6 hover:shadow-md transition-shadow;
+  }
+  
+  .stat-label {
+    @apply text-sm font-medium text-muted-foreground uppercase tracking-wide;
+  }
+  
+  .stat-value {
+    @apply text-3xl font-bold text-foreground mt-2;
+  }
+  
+  /* Dashboard Grid */
+  .dashboard-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+  }
+  
+  /* Section Header */
+  .section-header {
+    @apply flex items-center justify-between mb-6;
+  }
+  
+  .section-title {
+    @apply text-2xl font-bold text-foreground;
+  }
+  
+  /* Table Enhancements */
+  .table-container {
+    @apply border border-border rounded-lg overflow-hidden;
+  }
+  
+  .table-header {
+    @apply bg-muted/50;
+  }
+  
+  .table-row:hover {
+    @apply bg-muted/30 transition-colors;
   }
 }
