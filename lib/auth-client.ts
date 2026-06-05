@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 export interface User {
   id: string
@@ -14,6 +14,24 @@ export interface Session {
   token: string
 }
 
+// Event emitter untuk sinkronisasi session antar hook
+class SessionEmitter {
+  private listeners: ((session: Session | null) => void)[] = []
+
+  subscribe(listener: (session: Session | null) => void) {
+    this.listeners.push(listener)
+    return () => {
+      this.listeners = this.listeners.filter(l => l !== listener)
+    }
+  }
+
+  emit(session: Session | null) {
+    this.listeners.forEach(listener => listener(session))
+  }
+}
+
+const sessionEmitter = new SessionEmitter()
+
 // Simple client-side session management
 export function useSession() {
   const [session, setSession] = useState<Session | null>(null)
@@ -24,19 +42,27 @@ export function useSession() {
     const stored = localStorage.getItem('auth_session')
     if (stored) {
       try {
-        setSession(JSON.parse(stored))
+        const parsedSession = JSON.parse(stored)
+        setSession(parsedSession)
       } catch (e) {
         console.error('Failed to parse session')
+        localStorage.removeItem('auth_session')
       }
     }
     setIsPending(false)
+
+    // Subscribe to session changes
+    const unsubscribe = sessionEmitter.subscribe((newSession) => {
+      setSession(newSession)
+    })
 
     // Listen for storage changes (sign-in/sign-out from other tabs)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'auth_session') {
         if (e.newValue) {
           try {
-            setSession(JSON.parse(e.newValue))
+            const parsedSession = JSON.parse(e.newValue)
+            setSession(parsedSession)
           } catch (err) {
             console.error('Failed to parse session')
           }
@@ -47,7 +73,11 @@ export function useSession() {
     }
 
     window.addEventListener('storage', handleStorageChange)
-    return () => window.removeEventListener('storage', handleStorageChange)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      unsubscribe()
+    }
   }, [])
 
   return { data: session, isPending }
@@ -67,6 +97,7 @@ export async function signIn(email: string, password: string) {
 
   const session = await response.json()
   localStorage.setItem('auth_session', JSON.stringify(session))
+  sessionEmitter.emit(session)
   return session
 }
 
@@ -84,11 +115,13 @@ export async function signUp(email: string, password: string, name: string) {
 
   const session = await response.json()
   localStorage.setItem('auth_session', JSON.stringify(session))
+  sessionEmitter.emit(session)
   return session
 }
 
 export async function signOut() {
   localStorage.removeItem('auth_session')
+  sessionEmitter.emit(null)
 }
 
 export const authClient = {
