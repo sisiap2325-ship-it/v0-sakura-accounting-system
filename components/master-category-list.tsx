@@ -12,11 +12,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Pencil, Trash2, ArrowDown, ArrowUp, Calendar } from 'lucide-react'
 import {
   deleteIncomeCategory,
   deleteExpenseCategory,
 } from '@/app/actions/master'
+import { cn } from '@/lib/utils'
 
 interface Category {
   id: string
@@ -61,43 +63,92 @@ export function MasterCategoryList({
 
   if (categories.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        <p>Belum ada kategori. Buat kategori baru untuk memulai.</p>
+      <div className="text-center py-12">
+        <div className="w-12 h-12 bg-muted rounded-lg mx-auto mb-3 flex items-center justify-center">
+          {type === 'income' ? (
+            <ArrowDown className="w-6 h-6 text-muted-foreground" />
+          ) : (
+            <ArrowUp className="w-6 h-6 text-muted-foreground" />
+          )}
+        </div>
+        <p className="text-muted-foreground">
+          Belum ada kategori {type === 'income' ? 'pemasukan' : 'pengeluaran'}
+        </p>
       </div>
     )
   }
 
   return (
     <>
-      <div className="space-y-2">
-        {categories.map((category) => (
-          <Card key={category.id} className="p-4">
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-medium">{category.name}</h3>
-                  {category.code && (
-                    <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                      {category.code}
-                    </span>
+      <div className="space-y-3">
+        {categories.map((category, index) => (
+          <Card
+            key={category.id}
+            className={cn(
+              'p-4 border border-border hover:shadow-md transition-all duration-200',
+              'bg-card hover:bg-card/80'
+            )}
+          >
+            <div className="flex items-start justify-between gap-4">
+              {/* Left: Number Badge & Content */}
+              <div className="flex items-start gap-4 flex-1 min-w-0">
+                <div
+                  className={cn(
+                    'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm',
+                    type === 'income'
+                      ? 'bg-success/10 text-success'
+                      : 'bg-destructive/10 text-destructive'
                   )}
+                >
+                  {index + 1}
                 </div>
-                {category.description && (
-                  <p className="text-sm text-gray-600 mt-1">{category.description}</p>
-                )}
-                <p className="text-xs text-gray-500 mt-2">
-                  Dibuat: {new Date(category.createdAt).toLocaleDateString('id-ID')}
-                </p>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-semibold text-foreground">{category.name}</h3>
+                    {category.code && (
+                      <Badge
+                        variant="secondary"
+                        className="text-xs"
+                      >
+                        ID: {category.code}
+                      </Badge>
+                    )}
+                  </div>
+
+                  {category.description && (
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                      {category.description}
+                    </p>
+                  )}
+
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-2">
+                    <Calendar className="w-3 h-3" />
+                    {new Date(category.createdAt).toLocaleDateString('id-ID', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </div>
+                </div>
               </div>
 
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" disabled>
+              {/* Right: Action Buttons */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   <Pencil className="w-4 h-4" />
                 </Button>
                 <Button
-                  variant="destructive"
+                  variant="ghost"
                   size="sm"
                   onClick={() => setDeleteId(category.id)}
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -107,20 +158,21 @@ export function MasterCategoryList({
         ))}
       </div>
 
+      {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Hapus Kategori?</AlertDialogTitle>
             <AlertDialogDescription>
-              Kategori ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.
+              Kategori ini akan dihapus secara permanen. Semua transaksi yang menggunakan kategori ini akan terpengaruh. Tindakan ini tidak dapat dibatalkan.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <div className="flex gap-2 justify-end">
+          <div className="flex gap-2 justify-end pt-4">
             <AlertDialogCancel>Batal</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteId && handleDelete(deleteId)}
               disabled={deleting}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-destructive hover:bg-destructive/90"
             >
               {deleting ? 'Menghapus...' : 'Hapus'}
             </AlertDialogAction>
